@@ -1,4 +1,11 @@
 import streamlit as st
+import importlib.util
+
+st.write("snowflake:", importlib.util.find_spec("snowflake"))
+st.write("snowflake.connector:", importlib.util.find_spec("snowflake.connector"))
+
+
+import streamlit as st
 
 # Title and instructions
 st.title(f"Customize Your Smoothie :cup_with_straw: {st.__version__}")
