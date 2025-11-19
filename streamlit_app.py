@@ -1,7 +1,7 @@
 import streamlit as st
 import importlib.util
 
-st.write("snowflake:", importlib.util.find_spec("snowflake"))
+st.title("snowflake:", importlib.util.find_spec("snowflake"))
 st.write("snowflake.connector:", importlib.util.find_spec("snowflake.connector"))
 
 
