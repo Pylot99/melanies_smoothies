@@ -42,3 +42,12 @@ if ingredients_list and name_on_order:
             f"Ingredients: {ingredients_string}",
             icon="✅",
         )
+
+
+
+
+
+# New section to display smoothiefroot nutirtion information
+import requests
+smoothifroot_response = requests.get("https://my.snoothiefroot.com/api/fruit/watermelom")
+st.text(smoothiefroot_response)
