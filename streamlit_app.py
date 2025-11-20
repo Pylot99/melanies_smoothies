@@ -10,10 +10,10 @@ st.write("The name on your Smoothie will be", name_on_order)
 # Connect to Snowflake using Streamlit's connection API
 conn = st.connection("snowflake", type="snowflake")
 
-# 🔹 Get the Snowpark session (note the parentheses!)
+# 🔹 Get the Snowpark session
 session = conn.session()
 
-# Load fruit options (SELECT is fine via conn.query)
+# Load fruit options
 fruit_df = conn.query(
     "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
 )
@@ -29,12 +29,16 @@ ingredients_list = st.multiselect(
 if ingredients_list and name_on_order:
     # Build a single string of ingredients
     ingredients_string = " ".join(ingredients_list)
-    st.subheader(fruit_chosen + 'Nutrition Information')
-    # 🔹 Optional: call your Smoothiefroot API for each fruit selected
+
+    # Nutrition info section
+    st.subheader("Nutrition Information")
+
+    # 🔹 Call your Smoothiefroot API for each fruit selected
     for fruit_chosen in ingredients_list:
         smoothiefroot_response = requests.get(
             f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen.lower()}"
         )
+
         st.write(f"Smoothiefroot data for **{fruit_chosen}**:")
         st.dataframe(
             data=smoothiefroot_response.json(),
