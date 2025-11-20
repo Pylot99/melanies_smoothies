@@ -15,7 +15,7 @@ session = conn.session()
 
 # Load fruit options
 fruit_df = conn.query(
-    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
+    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME",col(FRUIT_OPTION')
 )
 fruit_list = fruit_df["FRUIT_NAME"].tolist()
 st.stop()
