@@ -14,9 +14,13 @@ conn = st.connection("snowflake", type="snowflake")
 session = conn.session()
 
 # Load fruit options (simple SELECT via conn.query)
-fruit_df = conn.query(
-    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
-)
+#fruit_df = conn.query(
+#    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME")
+
+# COnvert the Snowpark Dataframe to a Pnadas Dataframe so we can use the LOC function
+pf_df=my_dataframe.to_pandas()
+st.dataframe(pd_df)
+st.stop()
 
 # Convert to a plain Python list
 fruit_list = fruit_df["FRUIT_NAME"].tolist()
