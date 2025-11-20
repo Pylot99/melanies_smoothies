@@ -18,6 +18,7 @@ fruit_df = conn.query(
     "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
 )
 fruit_list = fruit_df["FRUIT_NAME"].tolist()
+st.stop()
 
 # Let the user pick up to 5 ingredients
 ingredients_list = st.multiselect(
