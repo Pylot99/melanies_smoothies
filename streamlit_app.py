@@ -13,12 +13,13 @@ conn = st.connection("snowflake", type="snowflake")
 # 🔹 Get the Snowpark session
 session = conn.session()
 
-# Load fruit options
+# Load fruit options (simple SELECT via conn.query)
 fruit_df = conn.query(
-    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME",col(FRUIT_OPTION')
+    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
 )
+
+# Convert to a plain Python list
 fruit_list = fruit_df["FRUIT_NAME"].tolist()
-st.stop()
 
 # Let the user pick up to 5 ingredients
 ingredients_list = st.multiselect(
