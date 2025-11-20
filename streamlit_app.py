@@ -65,7 +65,7 @@ if ingredients_list and name_on_order:
 
         insert_sql = f"""
             INSERT INTO SMOOTHIES.PUBLIC.ORDERS (INGREDIENTS, NAME_ON_ORDER)
-            VALUES ('{safe_ingredients}', '{safe_name}')
+            VALUES ('{safe_ingredients }', '{safe_name }')
         """
 
         session.sql(insert_sql).collect()
