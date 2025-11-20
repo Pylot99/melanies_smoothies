@@ -29,7 +29,7 @@ ingredients_list = st.multiselect(
 if ingredients_list and name_on_order:
     # Build a single string of ingredients
     ingredients_string = " ".join(ingredients_list)
-
+    st.subheader(fruit_chosen + 'Nutrition Information')
     # 🔹 Optional: call your Smoothiefroot API for each fruit selected
     for fruit_chosen in ingredients_list:
         smoothiefroot_response = requests.get(
