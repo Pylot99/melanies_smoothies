@@ -27,17 +27,29 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list and name_on_order:
+    # Build a single string of ingredients
     ingredients_string = " ".join(ingredients_list)
 
-    for fruit_chosen in ingredients_list
-        ingredients_string += fruit_chosen + ' '
-        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
-    
+    # 🔹 Optional: call your Smoothiefroot API for each fruit selected
+    for fruit_chosen in ingredients_list:
+        smoothiefroot_response = requests.get(
+            f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen.lower()}"
+        )
+        st.write(f"Smoothiefroot data for **{fruit_chosen}**:")
+        st.dataframe(
+            data=smoothiefroot_response.json(),
+            use_container_width=True,
+        )
+
+    # Only run the insert when the button is clicked
     if st.button("Submit Order"):
+        # Basic escaping of single quotes to avoid breaking the SQL
+        safe_ingredients = ingredients_string.replace("'", "''")
+        safe_name = name_on_order.replace("'", "''")
+
         insert_sql = f"""
             INSERT INTO SMOOTHIES.PUBLIC.ORDERS (INGREDIENTS, NAME_ON_ORDER)
-            VALUES ('{ingredients_string}', '{name_on_order}')
+            VALUES ('{safe_ingredients}', '{safe_name}')
         """
 
         # 🔹 Use Snowpark session for the INSERT
@@ -48,10 +60,3 @@ if ingredients_list and name_on_order:
             f"Ingredients: {ingredients_string}",
             icon="✅",
         )
-
-
-
-
-
-
-
