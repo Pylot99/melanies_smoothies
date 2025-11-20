@@ -49,5 +49,5 @@ if ingredients_list and name_on_order:
 
 # New section to display smoothiefroot nutirtion information
 import requests
-smoothifroot_response = requests.get("https://my.snoothiefroot.com/api/fruit/watermelom")
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelom")
 st.text(smoothiefroot_response)
