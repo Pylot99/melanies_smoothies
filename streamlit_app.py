@@ -15,13 +15,13 @@ session = conn.session()
 
 # Load fruit options - conn.query already returns a Pandas DataFrame
 fruit_df = conn.query(
-    "SELECT FRUIT_NAME FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
+    "SELECT FRUIT_NAME, FRUIT_OPTIONS FROM SMOOTHIES.PUBLIC.FRUIT_OPTIONS ORDER BY FRUIT_NAME"
 )
 
-# Optional: show the DataFrame for debugging
-# st.dataframe(fruit_df)
+# Create a SEARCH_ON column using FRUIT_OPTIONS exactly as the user requested
+fruit_df["SEARCH_ON"] = fruit_df["FRUIT_OPTIONS"]
 
-# Convert to a plain Python list
+# Convert FRUIT_NAME into a simple Python list
 fruit_list = fruit_df["FRUIT_NAME"].tolist()
 
 # Let the user pick up to 5 ingredients
@@ -35,27 +35,31 @@ if ingredients_list and name_on_order:
     # Build a single string of ingredients
     ingredients_string = " ".join(ingredients_list)
 
-    # Nutrition info section
     st.subheader("Nutrition Information")
 
-    # 🔹 Call your Smoothiefroot API for each fruit selected
+    # 🔹 Loop through each selected fruit
     for fruit_chosen in ingredients_list:
+
+        # Lookup SEARCH_ON from the DataFrame
+        search_on = fruit_df.loc[
+            fruit_df["FRUIT_NAME"] == fruit_chosen, "SEARCH_ON"
+        ].iloc[0]
+
+        st.write(f"The search value for **{fruit_chosen}** is **{search_on}**.")
+
+        # Call your Smoothiefroot API using FRUIT_OPTIONS as requested
         smoothiefroot_response = requests.get(
-            f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen.lower()}"
+            f"https://my.smoothiefroot.com/api/fruit/{search_on}"
         )
 
-        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-        st.write('Th e search value for  ', fruit_chosen,' is ', search_on, '.')
-        
         st.write(f"Smoothiefroot data for **{fruit_chosen}**:")
         st.dataframe(
             data=smoothiefroot_response.json(),
             use_container_width=True,
         )
 
-    # Only run the insert when the button is clicked
+    # Insert order only when the user clicks the button
     if st.button("Submit Order"):
-        # Basic escaping of single quotes to avoid breaking the SQL
         safe_ingredients = ingredients_string.replace("'", "''")
         safe_name = name_on_order.replace("'", "''")
 
@@ -64,7 +68,6 @@ if ingredients_list and name_on_order:
             VALUES ('{safe_ingredients}', '{safe_name}')
         """
 
-        # 🔹 Use Snowpark session for the INSERT
         session.sql(insert_sql).collect()
 
         st.success(
